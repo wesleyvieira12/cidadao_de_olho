@@ -1,0 +1,46 @@
+FROM phpdockerio/php72-fpm:latest
+
+RUN mkdir ~/application
+
+RUN apt-get update && apt-get install -y wget
+
+ENV DOCKERIZE_VERSION v0.6.1
+
+RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+    && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+    && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+
+WORKDIR "/application"
+
+COPY ./back-end .
+
+# Fix debconf warnings upon build
+ARG DEBIAN_FRONTEND=noninteractive
+
+# Install selected extensions and other stuff
+RUN apt-get update \
+    && apt-get -y --no-install-recommends install  php7.2-mysql php-redis php7.2-bcmath php7.2-gmp \
+    && apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
+
+RUN chown -R www-data:www-data /application \
+    /application/storage \
+    /application/bootstrap/cache
+
+RUN chmod -R 777 storage/ & \
+    chmod -R 777 bootstrap/
+
+RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
+
+RUN apt-get install nodejs -y
+
+RUN ["chmod","+x","migrate.sh"]
+
+ENTRYPOINT ["sh","/application/migrate.sh"]
+
+
+
+
+
+
+
+

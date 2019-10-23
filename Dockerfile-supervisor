@@ -1,0 +1,32 @@
+FROM phpdockerio/php72-fpm:latest
+
+RUN mkdir ~/application
+
+RUN apt-get update && apt-get install -y wget
+
+ENV DOCKERIZE_VERSION v0.6.1
+
+RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+    && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+    && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+
+WORKDIR "/application"
+
+COPY ./back-end .
+
+# Fix debconf warnings upon build
+ARG DEBIAN_FRONTEND=noninteractive
+
+# Install selected extensions and other stuff
+RUN apt-get update \
+    && apt-get -y --no-install-recommends install  php7.2-mysql php-redis php7.2-bcmath php7.2-gmp \
+    && apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
+
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends \
+    supervisor
+ 
+COPY ./supervisor/supervisord.conf /etc/supervisor
+COPY ./supervisor/configs-supervisor /etc/supervisor/conf.d
+
+ENTRYPOINT ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]
