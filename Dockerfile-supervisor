@@ -30,8 +30,6 @@ RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
 
 RUN apt-get install nodejs -y
 
-RUN ["chmod","+x","/application/supervisor/migrate.sh"]
-
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
     supervisor
@@ -39,4 +37,5 @@ RUN apt-get update \
 COPY ./supervisor/supervisord.conf /etc/supervisor
 COPY ./supervisor/configs-supervisor /etc/supervisor/conf.d
 
-ENTRYPOINT ["sh","/application/supervisor/migrate.sh"]
+ENTRYPOINT ["dockerize", "-wait", "tcp://redis:6379", "-wait", "tcp://mysql:3306", "-wait", "tcp://php-fpm:9000", "-timeout", "90s", "/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]
+
