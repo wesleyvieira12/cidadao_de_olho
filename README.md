@@ -36,9 +36,24 @@ Após a execução correta dos comandos você poderá acessar os recursos do sis
 Rota para mostrar o ranking das redes sociais mais utilizadas dentre os deputados, ordenado de forma decrescente:
  - http://localhost:8080/api/social-networks/ranking
 
-Link para acessar o sistema do supervisor ( usuario: root, senha: root ):
+Link para acessar o sistema do supervisor ( usuario: root, senha: root ), ele serve para monitorar processos e reinicia-los, no meu caso utilizei ele para monitorar o funcionamento do LARAVEL SCHEDULE, basta acessar pelo navegador para ver os processos rodando:
  - http://localhost:9001
 
-Link para acessar o sistema do phpMyAdmin (servidor: mysql, usuario: root , senha: Moderador12@ ):
-
- - http://localhost:8081
+Link para acessar o sistema do phpMyAdmin (servidor: mysql, usuario: root , senha: Moderador12@ ), serve para visualizar o banco de dados de forma grafica pelo navegador:
+ 1. http://localhost:8081
+ 
+  # TECNOLOGIAS UTILIZADAS
+  
+ 2. Docker
+ 3. Laravel 5.7
+ 4. Redis (cache)
+ 5. Mysql 5.7
+ 6. PHP-FPM
+ 7. PhpMyAdmin
+ 8. Supervisor
+ 9. Ngnix
+ 
+   # PACOTES EXTRAS
+   
+ 1. Guzzle - Serve para consumir dados de uma API.
+ 2. Predis - Serve para fazer a comunicação com o cache ( redis ) 
