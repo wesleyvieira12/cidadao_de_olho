@@ -13,14 +13,7 @@ Desenvolver uma API, com apenas 2 rotas. Uma para mostrar os top 5 deputados que
  - Deve realizar o clone do projeto no seu computador, para a pasta "cidadao" utilizando o comando a seguir:
  `git clone https://github.com/wesleyvieira12/cidadao_de_olho.git cidadao`
  - Entre na pasta "cidadao", com o comando: `cd cidadao`
- - Execute o comando: `docker-compose up -d`
- Se tudo ocorrer corretamente aparecerá no seu terminar o seguinte texto, que mostra que todos os containers subiram corretamente:
- **Creating redis      ... done
-Creating mysql ... done
-Creating phpmyadmin ... done
-Creating php-fpm    ... done
-Creating supervisor ... done
-Creating nginx      ... done**
+ - Execute o comando: `docker-compose up -d` . Dependendo do seu computador, esse processo pode demorar alguns minutos. Só vá para o proximo passo, caso já consiga acessar a pagina a seguir no seu navegador: [http://localhost:8080](http://localhost:8080). Se estiver aparecendo o erro: 502 Bad Gateway. Espera mais alguns minutos e tente acessar o link novamente, pois o container no php-fpm ainda não subiu por completo.
 	 
  - Apos o termino da execução do comando anterior, você deve entrar no container "php-fpm", para que possa popular o seu banco rapidamente, pois caso não realize esse passo, você deverá esperar até 00h, pois os comandos que populam as tabelas só executam de 22h às 00h. Para entrar no container você deve utilizar o comando: `docker exec -it php-fpm bash`
  - Agora que você está dentro do container, execute o comando: `php artisan update:deputies`
