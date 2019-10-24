@@ -45,6 +45,7 @@ services:
         - "3306:3306"
       networks:
         - app-network
+      
 ##################################################
 #                 NGINX                          #
 ##################################################
@@ -66,7 +67,9 @@ services:
 #                 PHP-FPM                        #
 ##################################################
     php-fpm:
-      image: wesleyvieira12/cidadao-php-fpm:v1
+      build:
+        context: ./
+        dockerfile: Dockerfile-php-fpm
       container_name: php-fpm
       working_dir: /application
       volumes:
@@ -81,7 +84,9 @@ services:
 #                 SUPERVISOR                     #
 ##################################################
     supervisor:
-      image: wesleyvieira12/cidadao-supervisor:v1
+      build:
+        context: ./
+        dockerfile: Dockerfile-supervisor
       container_name: supervisor
       working_dir: /application
       volumes:
@@ -99,4 +104,3 @@ services:
 ##################################################
 networks:
   app-network:
-    driver: bridge
