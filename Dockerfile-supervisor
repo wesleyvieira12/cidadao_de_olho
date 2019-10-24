@@ -22,6 +22,16 @@ RUN apt-get update \
     && apt-get -y --no-install-recommends install  php7.2-mysql php-redis php7.2-bcmath php7.2-gmp \
     && apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
 
+RUN chown -R www-data:www-data /application \
+    /application/storage \
+    /application/bootstrap/cache
+
+RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
+
+RUN apt-get install nodejs -y
+
+RUN ["chmod","+x","/application/supervisor/migrate.sh"]
+
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
     supervisor
@@ -29,4 +39,4 @@ RUN apt-get update \
 COPY ./supervisor/supervisord.conf /etc/supervisor
 COPY ./supervisor/configs-supervisor /etc/supervisor/conf.d
 
-ENTRYPOINT ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]
+ENTRYPOINT ["sh","/application/supervisor/migrate.sh"]
